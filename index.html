@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Практична робота: Прибутковість, Рентабельність та Амортизація</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        eco: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        earth: {
+                            50: '#fdfbf7',
+                            100: '#f7f2e8',
+                            200: '#eee3cf',
+                            700: '#634f36',
+                            800: '#473928',
+                            900: '#2c2217',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9f7;
+            color: #1a2e22;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+        }
+        textarea {
+            resize: vertical;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+            .print-border {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+            }
+            .print-break-inside {
+                page-break-inside: avoid;
+            }
+            input, textarea {
+                border: 1px solid #94a3b8 !important;
+                background-color: #ffffff !important;
+            }
+        }
+        .eco-gradient {
+            background: linear-gradient(135deg, #166534 0%, #15803d 50%, #047857 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 flex flex-col justify-between">
+
+    <!-- Top Navigation Header -->
+    <header class="eco-gradient text-white shadow-lg no-print sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-md">
+                    <i class="fa-solid fa-seedling text-2xl text-eco-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">АгроЕкономіка: Практикум</h1>
+                    <p class="text-xs text-eco-200">Робочий аркуш студента (Оцінювання: 12 балів)</p>
+                </div>
+            </div>
+
+            <!-- Header Grade Scale & Print Button -->
+            <div class="flex items-center gap-4">
+                <div class="bg-black/20 px-4 py-2 rounded-lg flex items-center gap-3 backdrop-blur-sm">
+                    <div class="text-right">
+                        <div class="text-xs text-eco-200">Максимальна оцінка:</div>
+                        <div class="text-lg font-bold leading-none text-white">12 балів</div>
+                    </div>
+                </div>
+                <button onclick="window.print()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Друкувати / Зберегти у PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow">
+
+        <!-- Title & Student Info Block -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-eco-100 mb-8 print-border">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 pb-6 mb-6">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-eco-100 text-eco-800 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">Практична робота</span>
+                    <h1 class="text-2xl md:text-3xl font-bold text-eco-950">Розрахунок прибутковості, рентабельності та амортизації підприємства</h1>
+                </div>
+                <div class="text-right text-sm text-gray-500">
+                    <p><i class="fa-regular fa-clock mr-1 text-eco-600"></i> Час виконання: 45 хв</p>
+                    <p><i class="fa-solid fa-graduation-cap mr-1 text-eco-600"></i> Шкала: 1–12 балів</p>
+                </div>
+            </div>
+
+            <!-- Student Info Form -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-earth-50 p-4 rounded-xl border border-earth-200">
+                <div>
+                    <label class="block text-xs font-semibold text-earth-800 mb-1">Студент (ПІБ):</label>
+                    <input type="text" id="student-name" placeholder="Прізвище, ім'я, по батькові" class="w-full bg-white border border-earth-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-earth-800 mb-1">Група / Курс:</label>
+                    <input type="text" id="student-group" placeholder="напр. АГ-31" class="w-full bg-white border border-earth-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-earth-800 mb-1">Дата виконання:</label>
+                    <input type="date" id="student-date" class="w-full bg-white border border-earth-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- Corrected Instructions Block -->
+        <div class="bg-gradient-to-r from-eco-900 to-eco-800 text-white rounded-2xl p-6 shadow-sm mb-8 print-border">
+            <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-list text-eco-400"></i> Інструкція для студента
+            </h2>
+            <ol class="list-decimal list-inside space-y-2 text-sm text-eco-100 leading-relaxed">
+                <li>Ознайомтеся з теоретичним матеріалом та поданими формулами розрахунку.</li>
+                <li><strong>Уважно</strong> прочитайте умови Задачі №1 та Задачі №2.</li>
+                <li>У спеціально відведених полях **повністю запишіть формули, математичний хід розв'язання (всі дії та розрахунки)** і підсумкову відповідь.</li>
+                <li>Після розв'язання задач обов'язково сформулюйте та **запишіть власний висновок** за результатами всієї практичної роботи.</li>
+                <li>Після завершення роботи збережіть документ або роздрукуйте його для подальшої здачі викладачу на перевірку. Оцінювання здійснюється за 12-бальною шкалою.</li>
+            </ol>
+        </div>
+
+        <!-- Theoretical Block -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-eco-100 mb-8 print-border">
+            <h2 class="text-xl font-bold text-eco-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-book-open text-eco-600"></i> Теоретична частина
+            </h2>
+
+            <p class="text-sm text-gray-700 leading-relaxed mb-6">
+                Розрахунок прибутковості, рентабельності та амортизації підприємства є ключовими інструментами для оцінки фінансової ефективності малого бізнесу, зокрема сервісних центрів, які займаються ремонтом і обслуговуванням сільськогосподарської техніки та вантажних автомобілів.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Formula Card 1 -->
+                <div class="bg-eco-50/60 p-4 rounded-xl border border-eco-200">
+                    <h3 class="font-bold text-eco-900 text-sm mb-1">Прибутковість (Чистий прибуток)</h3>
+                    <p class="text-xs text-gray-600 mb-3">Фінансовий результат діяльності після покриття всіх витрат підприємства.</p>
+                    <div class="bg-white p-2.5 rounded-lg border border-eco-300 text-center font-mono text-sm font-bold text-eco-950">
+                        П = В - С
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-2">
+                        <strong>П</strong> — чистий прибуток;<br>
+                        <strong>В</strong> — виручка (дохід);<br>
+                        <strong>С</strong> — витрати (зарплата, запчастини, пальне, податки, амортизація).
+                    </p>
+                </div>
+
+                <!-- Formula Card 2 -->
+                <div class="bg-eco-50/60 p-4 rounded-xl border border-eco-200">
+                    <h3 class="font-bold text-eco-900 text-sm mb-1">Рентабельність активів (Ра)</h3>
+                    <p class="text-xs text-gray-600 mb-3">Показує, наскільки ефективно підприємство використовує свої ресурси та майно.</p>
+                    <div class="bg-white p-2.5 rounded-lg border border-eco-300 text-center font-mono text-sm font-bold text-eco-950">
+                        Ра = (П / А) × 100%
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-2">
+                        <strong>П</strong> — чистий прибуток;<br>
+                        <strong>А</strong> — середня вартість активів (земля, приміщення, техніка, інструменти).
+                    </p>
+                </div>
+
+                <!-- Formula Card 3 -->
+                <div class="bg-eco-50/60 p-4 rounded-xl border border-eco-200">
+                    <h3 class="font-bold text-eco-900 text-sm mb-1">Амортизація (Прямолінійний метод)</h3>
+                    <p class="text-xs text-gray-600 mb-3">Поступове перенесення вартості основних засобів на витрати підприємства.</p>
+                    <div class="bg-white p-2.5 rounded-lg border border-eco-300 text-center font-mono text-xs font-bold text-eco-950">
+                        А = (Вартість ОЗ - Ліквідаційна) / (Строк × 12)
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-2">
+                        <strong>Строк</strong> — у роках;<br>
+                        Розраховується щомісячна сума відрахувань для накопичення коштів на заміну.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practical Task 1 -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-eco-100 mb-8 print-break-inside print-border">
+            <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                <span class="px-3 py-1 bg-eco-100 text-eco-800 text-xs font-bold rounded-lg uppercase tracking-wide">Задача № 1</span>
+                <span class="text-xs font-semibold text-gray-500">Максимальна оцінка: 5 балів</span>
+            </div>
+
+            <div class="bg-earth-50 border-l-4 border-earth-700 p-4 rounded-r-xl mb-6 text-sm text-earth-900 leading-relaxed">
+                <p class="font-bold text-earth-900 mb-1">Умова задачі:</p>
+                <p> Сервісний центр <strong>"ТехноСпектр"</strong> за місяць отримав Виручку від ремонту обладнання у розмірі <strong>720 000 грн</strong>. Сума всіх Витрат (зарплати, запчастини, податки, <em>без амортизації</em>) склала <strong>590 000 грн</strong>.</p>
+                <p class="mt-2">Крім того, компанія експлуатує новий підйомник вартістю <strong>120 000 грн</strong>. Ліквідаційна вартість підйомника — <strong>20 000 грн</strong>, а строк корисного використання — <strong>5 років</strong>.</p>
+            </div>
+
+            <!-- Detailed Written Steps for Task 1 -->
+            <div class="space-y-6">
+                <!-- Task 1.1 -->
+                <div>
+                    <label class="block font-semibold text-sm text-eco-950 mb-2">
+                        1. Запишіть формулу та повний розрахунок щомісячної суми амортизації підйомника прямолінійним методом:
+                    </label>
+                    <textarea rows="3" placeholder="Вкажіть формулу, підставте значення та запишіть розрахунок..." class="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-eco-500 focus:outline-none"></textarea>
+                    <div class="mt-2 flex items-center gap-2">
+                        <span class="text-xs font-medium text-gray-600">Підсумкова відповідь (щомісячна амортизація):</span>
+                        <input type="text" placeholder="грн/міс" class="border border-gray-300 rounded-lg px-3 py-1 text-sm font-semibold text-gray-800 w-48 focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Task 1.2 -->
+                <div class="pt-4 border-t border-gray-100">
+                    <label class="block font-semibold text-sm text-eco-950 mb-2">
+                        2. Запишіть повний розрахунок Чистого прибутку підприємства за місяць з урахуванням розрахованої амортизації:
+                    </label>
+                    <textarea rows="3" placeholder="Запишіть послідовність дій (Виручка - Витрати - Амортизація)..." class="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-eco-500 focus:outline-none"></textarea>
+                    <div class="mt-2 flex items-center gap-2">
+                        <span class="text-xs font-medium text-gray-600">Підсумкова відповідь (чистий прибуток за місяць):</span>
+                        <input type="text" placeholder="грн" class="border border-gray-300 rounded-lg px-3 py-1 text-sm font-semibold text-gray-800 w-48 focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practical Task 2 -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-eco-100 mb-8 print-break-inside print-border">
+            <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                <span class="px-3 py-1 bg-eco-100 text-eco-800 text-xs font-bold rounded-lg uppercase tracking-wide">Задача № 2</span>
+                <span class="text-xs font-semibold text-gray-500">Максимальна оцінка: 5 балів</span>
+            </div>
+
+            <div class="bg-earth-50 border-l-4 border-earth-700 p-4 rounded-r-xl mb-6 text-sm text-earth-900 leading-relaxed">
+                <p class="font-bold text-earth-900 mb-1">Умова задачі:</p>
+                <p>Фермерське господарство <strong>"Світанок"</strong> має загальну середню вартість активів (земля, приміщення, техніка) <strong>3 500 000 грн</strong>. За минулий рік господарство отримало Чистий прибуток у розмірі <strong>450 000 грн</strong>.</p>
+                <p class="mt-1 text-xs text-earth-800"><em>Довідково: середньогалузевий показник рентабельності активів у регіоні становить 10%.</em></p>
+            </div>
+
+            <!-- Detailed Written Steps for Task 2 -->
+            <div class="space-y-6">
+                <!-- Task 2.1 -->
+                <div>
+                    <label class="block font-semibold text-sm text-eco-950 mb-2">
+                        1. Запишіть формулу та повний розрахунок Рентабельності активів (Ра) господарства у відсотках:
+                    </label>
+                    <textarea rows="3" placeholder="Запишіть формулу рентабельності активів, підставте числові дані та проведіть розрахунок..." class="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-eco-500 focus:outline-none"></textarea>
+                    <div class="mt-2 flex items-center gap-2">
+                        <span class="text-xs font-medium text-gray-600">Підсумкова відповідь (Рентабельність активів, Ра):</span>
+                        <input type="text" placeholder="%" class="border border-gray-300 rounded-lg px-3 py-1 text-sm font-semibold text-gray-800 w-48 focus:ring-2 focus:ring-eco-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Task 2.2 -->
+                <div class="pt-4 border-t border-gray-100">
+                    <label class="block font-semibold text-sm text-eco-950 mb-2">
+                        2. На основі розрахованого показника зробіть висновок про ефективність використання активів підприємства (порівняйте із середньогалузевим показником 10%):
+                    </label>
+                    <textarea rows="3" placeholder="Обґрунтуйте, чи ефективно господарство використовує свої активи порівняно з регіоном..." class="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-eco-500 focus:outline-none"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Student Conclusion -->
+        <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-eco-100 mb-8 print-break-inside print-border">
+            <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                <h2 class="text-lg font-bold text-eco-950 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-eco-600"></i> Загальний висновок студентів за результатами роботи
+                </h2>
+                <span class="text-xs font-semibold text-gray-500">Максимальна оцінка: 2 бали</span>
+            </div>
+            
+            <p class="text-xs text-gray-600 mb-3">
+                Сформулюйте власний узагальнений висновок: чому для агропідприємства та сервісного центру важливо систематично розраховувати прибутковість, рентабельність та амортизацію.
+            </p>
+
+            <textarea rows="5" placeholder="Напишіть свій висновок тут..." class="w-full bg-white border border-gray-300 rounded-xl p-4 text-sm focus:ring-2 focus:ring-eco-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Teacher Evaluation Block (Visible on print/submission) -->
+        <div class="bg-earth-50 rounded-2xl p-6 shadow-sm border border-earth-200 mb-8 print-break-inside print-border">
+            <h3 class="text-base font-bold text-earth-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-check text-earth-700"></i> Блок оцінювання викладача (заповнюється при перевірці)
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
+                <div class="bg-white p-3 rounded-xl border border-earth-200">
+                    <div class="text-xs text-gray-500 mb-1">Задача №1 (макс. 5)</div>
+                    <div class="text-lg font-bold text-earth-900 border-b border-dashed border-gray-300 pb-1">____ / 5</div>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-earth-200">
+                    <div class="text-xs text-gray-500 mb-1">Задача №2 (макс. 5)</div>
+                    <div class="text-lg font-bold text-earth-900 border-b border-dashed border-gray-300 pb-1">____ / 5</div>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-earth-200">
+                    <div class="text-xs text-gray-500 mb-1">Висновок (макс. 2)</div>
+                    <div class="text-lg font-bold text-earth-900 border-b border-dashed border-gray-300 pb-1">____ / 2</div>
+                </div>
+                <div class="bg-eco-100 p-3 rounded-xl border border-eco-300">
+                    <div class="text-xs text-eco-900 font-bold mb-1">Підсумковий бал</div>
+                    <div class="text-xl font-extrabold text-eco-950">____ / 12</div>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-600 flex justify-between items-center pt-2">
+                <span>Підпис викладача: ____________________</span>
+                <span>Дата перевірки: "____" ____________ 20__ р.</span>
+            </div>
+        </div>
+
+        <!-- Action Button Box -->
+        <div class="text-center no-print">
+            <button onclick="window.print()" class="bg-eco-600 hover:bg-eco-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition flex items-center gap-2 mx-auto">
+                <i class="fa-solid fa-file-pdf"></i> Зберегти / Друкувати роботу для сдачі
+            </button>
+            <p class="text-xs text-gray-500 mt-2">Заповніть всі поля перед збереженням у PDF або друком.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-6 text-center text-xs text-gray-500 no-print">
+        <div class="max-w-5xl mx-auto px-4">
+            <p>© Робочий аркуш з дисципліни "Економіка та організація агропідприємств"</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set default date to today
+        document.getElementById('student-date').valueAsDate = new Date();
+    </script>
+</body>
+</html>
